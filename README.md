@@ -5,6 +5,7 @@
 ## 1.1 `Jenkinsfile`
 
 `Jenkinsfile`为批量部署的 Jenkins 所使用的 Jenkinsfile。其内调用的是下文 2 中的批量更新脚本。
+pod 设置中使用了 pvc 来保存 sql 文件，因此需要提前创建 pvc。或者使用 nfs 都可以。
 
 新建一个 pipeline 流水线`ops-update-pre-sql`，使用此 git 的`Jenkinsfile`，jenkins 不需要配置参数。
 
