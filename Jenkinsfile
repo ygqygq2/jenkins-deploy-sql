@@ -43,9 +43,10 @@ spec:
 
   environment {
     // 全局环境变量
-    MYSQL_HOST = "mysql-primary.uat"
-    MYSQL_OPR = credentials('uat-db-deploy-opr')  // 用户名使用环境变量 MYSQL_OPR_USR 密码使用 MYSQL_OPR_PSW
-    MYSQL_PORT = "3306"
+    DB_TYPE="mysql"
+    DB_HOST = "mysql-primary.uat"
+    DB_OPR = credentials('uat-db-deploy-opr')  // 用户名使用环境变量 DB_OPR_USR 密码使用 DB_OPR_PSW
+    DB_PORT = "3306"
   }
 
   parameters {
