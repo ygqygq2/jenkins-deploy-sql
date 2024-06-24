@@ -17,16 +17,11 @@ kind: Pod
 metadata:
   labels:
     jenkins-role: k8s-slave
-  namespace: uat
+  namespace: devops
 spec:
   containers:
-  - name: unzip
-    image: ygqygq2/k8s-alpine:v1.28.3
-    command:
-    - cat
-    tty: true
-  - name: mysql-client
-    image: mysql:8.0.29
+  - name: db-client
+    image: ygqygq2/surrealdb:latest
     command:
     - cat
     tty: true
@@ -36,17 +31,18 @@ spec:
   volumes:
   - name: data
     persistentVolumeClaim:
-      claimName: mysql-backup-mysqldump
+      claimName: db-backup
 """
     }
   }
 
   environment {
     // 全局环境变量
-    DB_TYPE="mysql"
-    DB_HOST = "mysql-primary.uat"
-    DB_OPR = credentials('uat-db-deploy-opr')  // 用户名使用环境变量 DB_OPR_USR 密码使用 DB_OPR_PSW
-    DB_PORT = "3306"
+    DB_TYPE="surreal"
+    DB_HOST = "surrealdb-tikv.pre"
+    DB_OPR = credentials('pre-db-opr')  // 用户名使用环境变量 DB_OPR_USR 密码使用 DB_OPR_PSW
+    DB_PORT = "8000"
+    DB_NAMESPACE = "ns"
   }
 
   parameters {
@@ -60,7 +56,7 @@ spec:
   stages {
     stage('发布') {
       steps {
-        container('unzip') {
+        container('db-client') {
           unstash '_sql.zip'
           sh '''#!/bin/bash -e\n
             # 检查 SQL_DIR 目录是否存在
@@ -74,7 +70,7 @@ spec:
           '''
         }
 
-        container('mysql-client') {
+        container('db-client') {
           ansiColor('xterm') {
             sh '''#!/bin/bash -e\n
               # sql 发布

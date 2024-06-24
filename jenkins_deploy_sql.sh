@@ -22,17 +22,34 @@ shell_log="$log_dir/$(basename ${me}).log"
 # 从JekinsFile定义的环境变量中获取用户名和密码信息.
 DB_USER=$DB_OPR_USR
 DB_PASSWORD=$DB_OPR_PSW
-# 在Jekinsfile文件中定义环境变量MYSQL_PROG
-[ ! -f "${DB_PROG}" ] && DB_PROG=mysql
-DB_DUMP="${DB_PROG}dump"
+
+### MYSQL ###
+# DB_HOST DB_OPR DB_PORT
+MYSQL_HOST="$DB_HOST"
+MYSQL_PORT="$DB_PORT"
+MYSQL_USER="$DB_OPR_USR"
+MYSQL_PASSWORD="$DB_OPR_PSW"
+[ ! -f "${DB_PROG}" ] && MYSQL_PROG="mysql"
+MYSQL_DUMP="${DB_PROG:-$MYSQL_PROG}dump"
+### MYSQL ###
+
+### SurrealDB ###
+[ ! -f "${DB_PROG}" ] && SURREAL_PROG="surreal"
+SURREAL_HOST="$DB_HOST"
+SURREAL_PORT="$DB_PORT"
+SURREAL_NAMESPACE="$DB_NAMESPACE"
+SURREAL_USER="$DB_OPR_USR"
+SURREAL_PASSWORD="$DB_OPR_PSW"
+### SurrealDB ###
 
 . $bash_path/functions/base.sh
 . $bash_path/functions/mysql.sh
+. $bash_path/functions/surrealdb.sh
 
 # 动态选择并调用相应的数据库操作函数
 function Call_Db_Function() {
   local operation=$1
-  local db_type=$DB_TYPE
+  local db_type=$(CapitalizeFirstLetter $DB_TYPE)
   local function_name="${operation}_${db_type}" # 构造函数名称
 
   if declare -f "$function_name" >/dev/null; then

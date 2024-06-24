@@ -2,6 +2,10 @@
 
 此仓库为 SQL 批量发版 Jenkinsfile 和脚本。
 
+使用到的 jenkins插件：
+* File Parameter
+* kubernetes
+
 ## 1.1 `Jenkinsfile`
 
 `Jenkinsfile`为批量部署的 Jenkins 所使用的 Jenkinsfile。其内调用的是下文 2 中的批量更新脚本。
