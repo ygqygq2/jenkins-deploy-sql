@@ -39,7 +39,7 @@ spec:
   environment {
     // 全局环境变量
     DB_TYPE="surreal"
-    DB_HOST = "surrealdb-tikv.pre"
+    DB_HOST = "surrealdb-tikv.pre.svc"
     DB_OPR = credentials('pre-db-opr')  // 用户名使用环境变量 DB_OPR_USR 密码使用 DB_OPR_PSW
     DB_PORT = "8000"
     DB_NAMESPACE = "ns"
