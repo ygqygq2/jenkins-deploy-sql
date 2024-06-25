@@ -2,7 +2,7 @@ function Backup_Db_Surreal() {
   local db=$1
   echo "####################### 备份[$db]开始 ##########################"
   Save_Log "备份[$db]"
-  $SURREAL_PROG export --conn ws://$SURREAL_HOST:$SURREAL_PORT --user $SURREAL_USER --pass $SURREAL_PASSWORD \
+  $SURREAL_PROG export --conn http://$SURREAL_HOST:$SURREAL_PORT --user $SURREAL_USER --pass $SURREAL_PASSWORD \
     --ns $SURREAL_NAMESPACE --db $db $backup_dir/${db}.export.surql
   Return_Echo "备份数据库[$db]"
 }
@@ -10,7 +10,7 @@ function Backup_Db_Surreal() {
 function Check_Db_Surreal() {
   # 暂时还没有查询方法
   local db=$1
-  $SURREAL_PROG --conn ws://$SURREAL_HOST:$SURREAL_PORT --user $SURREAL_USER --pass $SURREAL_PASSWORD \
+  $SURREAL_PROG --conn http://$SURREAL_HOST:$SURREAL_PORT --user $SURREAL_USER --pass $SURREAL_PASSWORD \
     --ns $SURREAL_NAMESPACE 'show databases' | egrep "^${db}$"
   Return_Echo "查询 db [$db] 存在"
 }
@@ -45,7 +45,7 @@ function Deploy_Db_Surreal() {
     for sql in $(find $db_dir -name *.surql -type f | sort -n); do
       echo "####################### 导入 [$db] < $sql ##########################"
       Save_Log "导入[$d] < $sql"
-      ${SURREAL_PROG} import --conn ws://$SURREAL_HOST:$SURREAL_PORT \
+      ${SURREAL_PROG} import --conn http://$SURREAL_HOST:$SURREAL_PORT \
         --user $SURREAL_USER --pass $SURREAL_PASSWORD --ns $SURREAL_NAMESPACE --db $db $sql
       [ $? -ne 0 ] && Red_Echo "# 数据库 [$db] 导入 [$sql] 出错 !!!" &&
         exit_code=$(($exit_code + 1)) && break
