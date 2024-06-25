@@ -42,7 +42,7 @@ spec:
     DB_HOST = "surrealdb-tikv.pre.svc"
     DB_OPR = credentials('pre-db-opr')  // 用户名使用环境变量 DB_OPR_USR 密码使用 DB_OPR_PSW
     DB_PORT = "8000"
-    DB_NAMESPACE = "ns"
+    // DB_NAMESPACE = "ns"
   }
 
   parameters {
@@ -50,6 +50,8 @@ spec:
         name: 'SQL_DIR', trim: true)
     booleanParam(defaultValue: 'true', description: '构建后是否清理 SQL_DIR 目录',
         name: 'SQL_DIR_CLEAN')
+    string(defaultValue: 'ns', description: '命名空间',
+        name: 'DB_NAMESPACE', trim: true)
     stashedFile '_sql.zip'
   }
 
