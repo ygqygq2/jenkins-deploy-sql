@@ -6,6 +6,10 @@
 * File Parameter
 * kubernetes
 
+支持的功能：
+- [x] mysql 发布 SQL 文件
+- [x] surrealdb 发布 surql
+
 ## 1.1 `Jenkinsfile`
 
 `Jenkinsfile`为批量部署的 Jenkins 所使用的 Jenkinsfile。其内调用的是下文 2 中的批量更新脚本。
